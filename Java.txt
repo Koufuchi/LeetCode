@@ -1,0 +1,625 @@
+
+ (教學) http://www.tsnien.idv.tw/Java2_WebBook/Java2.htm 
+        https://openhome.cc/Gossip/Java/
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+  Java 包含兩個軟體套件，一者為開發程式的 J2SDK；另一者為執行 Java 程式的 JVM。應注意的是，兩套軟體都必須安裝
+
+ (安裝) https://adoptopenjdk.net/index.html
+
+ --------------------------------------------------------------------------------------------------------------
+ ㊣ 物件
+
+   Java is an object-oriented programming language.
+
+   Everything in Java is associated with classes and objects, along with its attributes and methods. For example: in real life, a car is an object. The car has 
+   
+   attributes, such as weight and color, and methods, such as drive and brake.
+
+   A Class is like an object constructor, or a "blueprint" for creating objects.
+
+ ※ 在類別裡用 static 宣告的方法，不須建立物件也可調用。
+
+            用 public 宣告的方法，則須建立物件後才能調用。
+
+            用 private 宣告的變數，無法被其他類別調用。但可設定 get 和 set 方法解決。
+
+            用 final 宣告的變數，其值無法變動。
+
+    如果類別上沒有宣告 public 權限關鍵字，就算類別中的方法宣告為 public，也等於是套件權限了，因為類別本身是套件權限，其它套件根本就無法使用類別了，
+    更別說當中定義的方法。
+
+ ※ 靜態成員特性
+
+    1.靜態類別僅包含靜態成員
+  
+    2.不能使用new實體化
+
+    3.屬密封類別，無法被繼承
+
+    4.沒有執行個體，只能使用私有的建構函式，或者配合靜態建構函式
+
+    5.一般方法只有該類別實體可以叫用，靜態方法使用類別名稱後大家都可以叫用
+         
+
+
+ ※ 在 Java 語言裡，無論哪一種基本資料型態，或已宣告完成的物件，它都是以物件的觀念來處理，尤其在陣列資料型態裡更是明顯。如同物件一樣，宣告某一陣列變數，只不過產生了      資料型態架構，必須再經由 new 敘述才能在主記憶體裡取得變數空間
+
+ ※ 封裝性(Encapsulation)：
+
+        每一類別都具有封裝性，類別僅提供輸入/輸出介面，讓使用者呼叫引用，類別內的程式碼與變數與外界程式具有隔離性，亦是，無法直接呼叫或存取變數。
+        具有此特性，類別才允許任意移值使用，不會受到其他類別程式限制，如此才能具有軟體 IC 的功能。
+
+ ※ 繼承性(Extends)：
+
+        類別可以再擴充產生新的類別，新類別除了具有原父類別功能外，還可增加其他功能，這就是繼承性。
+
+ ※ 多型性(Polymorphism)：
+
+        一般程式語言的函數呼叫最大限制就是資料型態，物件導向所建構的類別可以隨需要自動改變相對應的資料型態，這就是多型性。譬如，我們建構一個加法器  (add(x, y))，當引         數 x 與 y 是整數時，則回傳結果是整數；呼叫同樣類別，當 x 與 y 是浮點數時，則回傳是浮點數。如果其他傳統程式設計的話，則必須分開製作一個回傳整數，另一個回傳            浮點數。
+
+  ㊣ new Clothes();    --- java 裡只要出現 new 就是建立物件 !! ----
+
+     在物件術語中，這叫作新建一個物件。如果要有個名牌，專門綁到這個物件上，可以如下宣告：
+
+     Clothes c1;
+
+     在Java的術語中，這叫宣告參考名稱（Reference name）、參考變數（Reference variable）。如果要將c1綁到新建的物件上，可以使用=指定，以Java的術語來說，稱為將c1名稱參       考 （refer）至新建物件。例如：
+
+     Clothes c1 = new Clothes();
+
+  ※ 物件指定與相等性 => https://openhome.cc/Gossip/Java/Reference.html
+
+
+  ※ Java中可以定義 建構式（Constructor）解決重複建立同一物件與同一屬性的問題。
+
+     建構式是與類別名稱同名的方法（Method），且不可宣告傳回型態( void )。
+
+     在創建物件的同時會調用與指定類別同名的建構式
+
+     類別名的首字必為大寫
+
+     範例：
+ 
+     class CashCard {
+        String number;
+        int balance;
+    	int bonus;
+   	CashCard(String number, int balance, int bonus) {
+        	this.number = number;  //建構式上的number、balance與bonus參數，與類別的number、balance、bonus資料成員同名了，為了區別，在物件資料成員前加上this關鍵字                 this.balance = balance;//，表示將number、balance與bonus參數的值，指定給這個物件的number、balance、bonus資料成員。    	
+        	this.bonus = bonus;
+        }
+     }
+
+     如此建立物件時可直接指定成員屬性而不需多行賦予 => CashCard card1 = new CashCard("A001", 500, 0);
+
+  ※ 在類別中定義方法時，如果不用傳回值，方法名稱前可以宣告void。
+
+          Ex. void charge(int money) {}
+
+     若方法會傳回值，必須於方法前宣告傳回值的型態。
+
+          Ex. int exchange(int bonus) {}
+
+
+  ※ 巢狀類別 
+
+     class OuterClass {
+    	int x = 10;
+ 
+        class InnerClass {
+           int y = 5;
+        }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+            OuterClass myOuter = new OuterClass();
+            OuterClass.InnerClass myInner = myOuter.new InnerClass();
+            System.out.println(myInner.y + myOuter.x);
+         }
+     }
+
+
+   ※ An interface is a completely "abstract class" that is used to group related methods with empty bodies
+
+      抽象類別宣告時沒有 body ({})
+
+      interface Animal {
+  	public void animalSound(); // interface method (does not have a body)
+  	public void sleep();       // interface method (does not have a body)
+      }
+
+      // Pig "implements" the Animal interface
+
+      class Pig implements Animal {
+ 	 public void animalSound() {  	   
+           System.out.println("The pig says: wee wee"); // The body of animalSound() is provided here
+         }
+         public void sleep() {  // The body of sleep() is provided here
+           System.out.println("Zzz");
+         }
+      }
+
+      class Main {
+        public static void main(String[] args) {
+          Pig myPig = new Pig();  // Create a Pig object
+          myPig.animalSound();
+          myPig.sleep();
+        }
+      }
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+  ※ 輸入
+
+     The Scanner class is used to get user input, and it is found in the java.util package.
+
+     引入： import java.util.Scanner;  // Import the Scanner class
+
+     建立： Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+  § ㊣ §-------
+
+  ※ ArrayList
+
+     import java.util.ArrayList; // import the ArrayList class
+
+      ArrayList<String> cars = new ArrayList<String>(); // Create an ArrayList object
+
+
+  ※ LinkedList
+
+     import java.util.LinkedList;
+
+      LinkedList<String> cars = new LinkedList<String>();
+
+
+  ※ The LinkedList class has all of the same methods as the ArrayList class because they both implement the List interface. This means that you can add items,      
+     change items, remove items and clear the list in the same way.
+
+  ※ How the ArrayList works
+   
+      The ArrayList class has a regular array inside it. When an element is added, it is placed into the array. If the array is not big enough, a new, larger array       
+      is created to replace the old one and the old one is removed.
+
+  ※ How the LinkedList works
+
+      The LinkedList stores its items in "containers." The list has a link to the first container and each container has a link to the next container in the list. To     
+      add an element to the list, the element is placed into a new container and that container is linked to one of the other containers in the list.
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+  ※ HashMap ： 可在 O(n) 內找到儲存的 key / value 值
+
+     import java.util.HashMap;
+
+     建立 :  Map<String, String> map = new HashMap<String, String>(); | 宣告Map型態時指定了 key/value 各自的型態，這邊都是宣告為 String
+
+     存入 :  map.put(" key ", " value "); | 使用 Map 的 put()方法將物件存入時，必須同時指定 key/value
+
+     取出 :  map.get(" key ")             | 使用 Map 的 get()方法取出物件時，指定 key
+
+     One object is used as a key (index) to another object (value). It can store different types: String keys and Integer values, or the same type, like: String keys      and String values.
+
+     Building the hashmap takes O(N) time, as there are N nodes to add, and adding items to a hashmap has a cost of O(1), so we get N * O(1) = O(N).
+
+  
+  ※ HashSet ： A HashSet is a collection of items where every item is unique.
+
+     HashSet 是一個沒有重複元素，無序的集合。 它是由HashMap實現的（HashSet中大量呼叫了HashMap的方法，其內部封裝了一個HashMap ），不保證元素的順序，而且HashSet允許使用 null      元素。
+
+     建立 : HashSet<Character> set = new HashSet<Character>(); 
+
+     存入 : set.add('a');
+
+     查找 : contains(Object object);
+
+     檢查 : isEmpty();
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+  ※ 佇列 Queue
+
+     如果希望收集物件時可以佇列方式，收集的物件加入至尾端，取得物件時可以從前端，則可以使用Queue介面的實作物件。Queue繼承自 Collection，所以也具有 Collection的
+    
+     add()、remove()、element()等方法，然而 Queue定義了自己的 offer()、poll()與 peek()等方法，最主要的差別之一在於，add()、remove()、element()等方法操作失敗時會拋出
+     例外，而 offer()、poll()與 peek()等方法操作失敗時會傳回特定值。
+
+     如果物件有實作Queue，並打算以佇列方式使用，且佇列長度受限，通常建議使用offer()、poll()與peek()等方法。
+
+     offer() 方法用來在佇列後端加入物件，成功會傳回true，失敗則傳回false。
+
+     poll() 方法用來取出佇列前端物件，若佇列為空則傳回null。
+
+     peek()用來取得（但不取出）佇列前端物件，若佇列為空則傳回null。
+
+     LinkedList 不僅實作了 List 介面，也實作了 Queue 的行為，所以可將 LinkedList 當作佇列來使用。
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+  ※ 例外處理 (Exceptions)
+
+  The try statement allows you to define a block of code to be tested for errors while it is being executed.
+
+  The catch statement allows you to define a block of code to be executed, if an error occurs in the try block.
+
+  try {
+    //  Block of code to try
+  }
+  catch(Exception e) {
+    //  Block of code to handle errors
+  }
+  finally {
+    // 不管 try catch 的結果如何，這裡的 code 都會執行
+  }
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+ ※ Threads
+
+ 兩種建立方法：
+
+ (1) public class Main extends Thread {  // created by extending the Thread class and overriding its run() method
+       public void run() {
+          System.out.println("This code is running in a thread");
+       }
+     }
+
+ (2) public class Main implements Runnable { // implement the Runnable interface
+       public void run() {
+          System.out.println("This code is running in a thread");
+       }
+     }
+
+
+ 兩種執行方法(對應其建立方式)：
+
+ (1) If the class extends the Thread class, the thread can be run by creating an instance of the class and call its start() method:
+
+     public class Main extends Thread {
+       public static void main(String[] args) {
+         Main thread = new Main();
+         thread.start();
+         System.out.println("This code is outside of the thread");
+       }
+       public void run() {
+         System.out.println("This code is running in a thread");
+       }
+     }
+
+
+ (2) If the class implements the Runnable interface, the thread can be run by passing an instance of the class to a Thread object's constructor and then calling the      thread's start() method:
+
+     public class Main implements Runnable {
+       public static void main(String[] args) {
+          Main obj = new Main();
+          Thread thread = new Thread(obj);
+          thread.start();
+          System.out.println("This code is outside of the thread");
+       }
+       public void run() {
+         System.out.println("This code is running in a thread");
+       }
+     }
+
+ ※ Differences between "extending" and "implementing" Threads:
+
+   The major difference is that when a class extends the Thread class, you cannot extend any other class, but by implementing the Runnable interface, it is possible     to extend from another class as well, like: class MyClass extends OtherClass implements Runnable
+
+ ※ 一致性問題
+
+   To avoid concurrency problems, it is best to share as few attributes between threads as possible. If attributes need to be shared, one possible solution is to use    the isAlive() method of the thread to check whether the thread has finished running before using any attributes that the thread can change.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+ ※ Lambda
+
+    parameter -> expression  // 參數不能是變數、賦值或是語句
+
+    (parameter1, parameter2) -> expression
+
+    (parameter1, parameter2) -> { code block }
+
+   Ex.
+
+    import java.util.ArrayList;
+
+    public class Main {
+      public static void main(String[] args) {
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        numbers.add(5);
+        numbers.add(9);
+        numbers.add(8);
+        numbers.add(1);
+        numbers.forEach( (n) -> { System.out.println(n); } );
+      }
+    }
+
+    Lambda expressions can be stored in variables if the variable's type is an interface which has only one method. 
+
+    import java.util.ArrayList;
+    import java.util.function.Consumer;
+
+    public class Main {
+      public static void main(String[] args) {
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        numbers.add(5);
+        numbers.add(9);
+        numbers.add(8);
+        numbers.add(1);
+        Consumer<Integer> method = (n) -> { System.out.println(n); };
+        numbers.forEach( method );
+      }
+    }
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+ ※ 編譯程序
+ 
+ (1) 編寫原始程式：
+
+         需依照 Java 程式規則，利用『記事本』編寫原始程式。完成後，儲存檔案名稱的副檔名需是 java，如 Demo.java 檔案。
+
+ (2) 編譯原始程式：
+    
+         完成原始程式製作後（如 Demo.java），則在『命令提示字元』視窗下，利用 javac 程式將原始檔案編譯成 Bytecode 檔（如 D:> javac Demo.java）。如果原始檔案沒有錯誤           的話，則會產生中介程式（如 Demo.class）；如果原始程式中有關鍵字錯誤（語法錯誤，如錯別字）或規則錯誤（語意錯誤，如文法不對），則會顯示錯誤位置（行數），需重           回『記事本』修改。
+
+ (3) 執行程式：
+ 
+         如果原始檔案沒有任何語意或語法錯誤，經由 javac 編譯後，將產生中介程式（如 Demo.class）。接下來，可利用 java 執行器執行該中介程式（如 D:> java Demo）。程式執          行的結果是否能滿足原目的，如果不能滿足的話，表示程式語法都對但邏輯上有問題，需重回『記事本』修改。修改後，也需再經過 javac 編譯，才可讓 java 執行。
+
+
+ ※ java 檔裡開頭的 public class xxx，其中 xxx 必要等同檔名(一個原始碼中可以有多個類別定義，但只能有一個是公開類別，且檔案主檔名必須與公開類別名稱相同。)
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ ※㊣ 浮點數
+       
+       System.out.println(10 / 3);
+
+       答案是3，而不是3.333333....，因為10與3會在int長度的空間中作運算，因此不會作浮點數表示，如果想得到3.333333...的結果，那麼必須有一個運算元是浮點數。例如：
+
+       System.out.println(10.0 / 3);
+
+       Java 中執行 1.0 – 0.8 的結果不是0.2，而是0.19999999999999996
+
+       因為 Java（包括其它程式語言）遵合 IEEE 754 浮點數演算（Floating-point arithmetic）規範，使用分數與指數來表示浮點數。例如0.5會使用1/2來表示，0.75會使用1/2 +           1/4來表示，0.875會使用1/2 + 1/4 + 1/8來表示，而0.1會使用1/16 + 1/32 + 1/256 + 1/512 +1/4096 + 1/8192 + ...無限循環下去，無法精確表示，因而造成運算上的誤差。
+
+       使用套件解決 => import java.math.BigDecimal;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ ※㊣ 別使用 == 或 != 來比較兩個 物件 實質內容值是否相同（因為 == 與 != 是比較物件參考），而要使用 equals()，例如 if (i1.equals(i2))
+
+      語法糖陷阱與拆裝箱 =>  https://openhome.cc/Gossip/Java/AutoBoxUnBox.html
+
+      不要將 + 用在重複性的串接場合，像是迴圈中或遞迴時使用 + 串接字串，這會因為頻繁產生新物件，造成效能上的負擔。
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ ※㊣ foreach 語法糖
+
+      將原本要輸入冗長的遍歷語法縮短，編譯器會自己轉換語法。
+
+      for(型態 指標 : 想遍歷的地方(須為 Array或其他可佚代的)){
+
+          操作指標;
+
+      }
+
+      Ex.
+
+      for(String element : list) {
+
+          System.out.println(element);
+
+      }
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+  ※
+
+  length :  Arrays (int[], double[], String[]) — 取得Array的長度
+
+  length():  String related Object (String, StringBuilder, etc) — 取得字串的長度
+
+  size():  Collection Object (ArrayList, Set, etc) — 取得集合物件相關大小
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+ ※ 指令
+
+ 1. 環境：
+
+    java -version | 查看java版本
+
+    javac         | 測試 J2SDK 是否安裝正確
+
+    java          | 測試 JRE（Java Runtime Environment）是否安裝正確
+
+
+ 2. 編譯(或可直接用 VScode 執行 & Debug )：
+
+    javac demo.java | 利用 javac 將原始檔案（Demo.java）編譯並生成 Bytecode檔案（Demo.class）
+
+    java demo       | 利用 JVM（java 命令）執行
+
+ 3. 基礎：
+
+    System.out.println() | 輸出顯示文字後換行
+
+    System.out.print()   | 輸出文字後不會換行
+
+    System.out.printf()  | f就是format的意思，也就是格式化，用在System.out上，就是對輸出文字作格式化後再顯示在文字模式中。
+                           printf()的第一個引數（Argument）是字串，當中%d、%h、%b等是格式控制符號，第二個引數開始，會依序置換掉第一個引數的格式控制符號。
+
+ 4. 轉型：
+
+    public char[] toCharArray() | 將一個字串 (String) 轉換成一個字元 (char) 陣列
+ 
+
+ 5. 一維陣列： java 裡陣列是物件
+
+    Java開發人員的撰寫慣例來說，建議將[]放在型態關鍵字之後
+
+    ( int course[];         | 宣告變數 course 為整數（int）的陣列變數。
+
+      course = new int[20]; | 由主記憶體取得 20 個整數空間，並配置給 course 變數使用。 )
+
+  = ( int[] course = new int [20]; )
+
+
+    course.length           | 變數 course 的長度
+
+    int[] course = {89, 90, 60, 70, 80};  | 宣告陣列時直接給予初值，則表示由記憶體取得空間後立即存入初值數值，陣列的大小固定，也不需再由 new 敘述來配置空間
+
+
+ 6. 二維陣列：
+
+    int[][] cords = {
+         {1, 2, 3},
+         {4, 5, 6}
+    };
+
+    int[][] cords = new int[2][3];  | 新建一個 2*3 的二維陣列
+                                   
+                             實際上 = 新建一個 int[][] 的物件，內含 2 個 int[] 型態的索引，分別參考至長度為 3 的一維陣列物件，初始值都是0
+
+
+    ㊣ java 裡陣列不能用 = 直接複製，會變參照，兩者連至同一位址
+
+
+ 7. 字串：
+
+    在 Java 中，字串是 java.lang.String 實例，用來包裹字元陣列，你可以用 "" 包括一串字元來建立字串：
+
+    substring()
+
+    (java.lang.)Character.isLetterOrDigit(char ch) | 若字符 ch 是字母或數字則返回 true，否則爲 false。
+
+    toLowerCase() | String 類別 (class) 有 toLowerCase() 方法 (method) ，將字串 (string) 中所有英文字母改為小寫
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+  ※所有條件查找子字串演算法問題的模板:
+
+  Here comes the template.
+
+  For most substring problem, we are given a string and need to find a substring of it which satisfy some restrictions. A general way is to use a hashmap assisted   with two pointers. The template is given below.
+
+  int findSubstring(string s){
+        vector<int> map(128,0);
+        int counter; // check whether the substring is valid
+        int begin=0, end=0; //two pointers, one point to tail and one  head
+        int d; //the length of substring
+
+        for() { /* initialize the hash map here */ }
+
+        while(end<s.size()){
+
+            if(map[s[end++]]-- ?){  /* modify counter here */ }
+
+            while(/* counter condition */){ 
+                 
+                 /* update d here if finding minimum*/
+
+                //increase begin to make it invalid/valid again
+                
+                if(map[s[begin++]]++ ?){ /*modify counter here*/ }
+            }  
+
+            /* update d here if finding maximum*/
+        }
+        return d;
+  }
+
+  One thing needs to be mentioned is that when asked to find maximum substring, we should update maximum after the inner while loop to guarantee that the substring   is valid. On the other hand, when asked to find minimum substring, we should update minimum inside the inner while loop.
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+ 76. Minimum Window Substring --Hard --slide window
+
+  class Solution {
+      public String minWindow(String s, String t) {
+        
+          int[] cnt = new int[123];
+        
+          for (char c : t.toCharArray()) { // 將目標 t 的成員當鍵，並計算出現的次數做為值  
+              cnt[c] += 1;
+          }                                 ADOBECODEBANC
+        
+          int begin = 0; // 最小長度起點
+        
+          int len = Integer.MAX_VALUE; // 最小長度值，初始設為最大 
+        
+          int count = t.length(); // 目標 t 的長度作為停止條件 3
+        
+          for (int left=0, right=0; right < s.length(); right++) { // 雙指針，右遍歷
+            
+              char c = s.charAt(right); // 當前字元 ADOBEC
+            
+              cnt[c]--; // 當前字元計算值 -1
+            
+              if(cnt[c] >= 0) count--; // 停止條件 -1 3-1-1-1
+            
+              while (count == 0) { // 當停止條件達成
+                
+                  char lc = s.charAt(left); // 左指標所在字元 A
+                
+                  cnt[lc]++; // 左指標所在字元字算值 +1
+                
+                  if (cnt[lc] > 0) { // 如果左指計算值 > 0
+                    
+                      if (right - left +1 < len) { //右指索引 - 左指索引 + 1 < 最小長度值 5-0+1 <
+                        
+                          begin = left; // 重設最小起點 0
+                        
+                          len = right - left +1;  // 重設最小長度 5-0+1
+                        
+                      }
+                      count++; // 停止條件 +1
+                  }
+                
+                  left++; // 左指 +1
+              }
+          }
+          return len == Integer.MAX_VALUE ? "" : s.substring(begin, begin+len);
+     }
+  }
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
