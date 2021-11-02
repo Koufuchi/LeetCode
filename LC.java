@@ -461,6 +461,16 @@ public class LC {
         System.out.println("執行次數 "+nums);
         return ans;
     }
+    // no59
+    public int missingNumber(int[] nums) {
+        // 因為都是不重複數且為連續序列，所以用相加應得的數減去實際加總數就能找到缺少的那個數字
+        int max = nums.length;
+        int cnt = 0;
+        for(int i : nums){
+            cnt += i;
+        }
+        return (max*(max+1)/2)-cnt;
+    }
     public int subNumIslands(char[][] grid, int i, int j){
   
         if(grid.length-1 < i || i < 0 || grid[0].length-1 < j || j < 0) return 1;
@@ -635,6 +645,7 @@ public class LC {
         System.out.println("no42 搶到最大金額可能數為: " + object.rob(no42));
         runtime(rs);
 
+        // no43
         rs = now();
         char[][] no43 = {/*  執行次數 = 總元素量 + (陸地數*4) - 島嶼數
                              最差為全陸地 => M*N + M*N*4 - 1
@@ -646,6 +657,12 @@ public class LC {
             {'1','0','0','0','0','0','0','0','1','1','1','0'}
         };
         System.out.println("島嶼數量: " + object.numIslands(no43));
+        runtime(rs);
+
+        // no59
+        rs = now();
+        int[] no59 = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19}; 
+        System.out.println("缺少的數字為: " + object.missingNumber(no59));
         runtime(rs);
     }
 }
