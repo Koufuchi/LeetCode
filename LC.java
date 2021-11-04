@@ -461,16 +461,6 @@ public class LC {
         System.out.println("執行次數 "+nums);
         return ans;
     }
-    // no59
-    public int missingNumber(int[] nums) {
-        // 因為都是不重複數且為連續序列，所以用相加應得的數減去實際加總數就能找到缺少的那個數字
-        int max = nums.length;
-        int cnt = 0;
-        for(int i : nums){
-            cnt += i;
-        }
-        return (max*(max+1)/2)-cnt;
-    }
     public int subNumIslands(char[][] grid, int i, int j){
   
         if(grid.length-1 < i || i < 0 || grid[0].length-1 < j || j < 0) return 1;
@@ -483,6 +473,66 @@ public class LC {
                   + subNumIslands(grid, i, j+1)
                   + subNumIslands(grid, i, j-1);
     }
+    // no50
+    public boolean containsDuplicate(int[] nums) {
+        
+        /* HashSet算法 5 ms 45 MB
+        HashSet set = new HashSet<Integer>();
+        
+        for(int i=0; i<nums.length; i++){
+            if(set.contains(nums[i])) return true;
+            set.add(nums[i]);
+        }
+        return false;*/
+
+        // 先排序再跑一遍 3ms 42 MB
+        Arrays.sort(nums);
+        for(int i=1; i<nums.length; i++) {
+            if(nums[i] == nums[i-1]) return true;
+        }
+        return false;
+    }
+    // no55
+    public boolean isAnagram(String s, String t) {
+        if (s == null || t == null || s.length() != t.length()) {
+            return false;
+        }
+        /* 對題目特化的解法，定一個 26 空間的陣列，並用「目標字母-a」當索引
+           a-z 相當於 1-26， ex: 'c'-'a' => 2, 'c'-'z' => -23
+           所以輸入字串-'a'得到的值就會剛好介於 0~25 */
+
+		int[] all = new int[26];
+        
+        // 3ms
+		/*for (int i=0; i<s.length(); i++) {
+			all[s.charAt(i)-'a']++;
+			all[t.charAt(i)-'a']--;
+		}*/
+        
+        // 2ms
+        for(char c: s.toCharArray()){
+             all[c-'a'] +=1;
+        }   
+        for(char c: t.toCharArray()){
+             all[c-'a'] -=1;
+        }   
+        
+		for (int i : all) {
+			if (i != 0) return false;
+		}
+		return true;
+    }
+    // no59
+    public int missingNumber(int[] nums) {
+        // 因為都是不重複數且為連續序列，所以用相加應得的數減去實際加總數就能找到缺少的那個數字
+        int max = nums.length;
+        int cnt = 0;
+        for(int i : nums){
+            cnt += i;
+        }
+        return (max*(max+1)/2)-cnt;
+    }
+
 
     // 斷行
     public static void whiteLine(){
@@ -498,7 +548,8 @@ public class LC {
     public static long now(){
         return System.currentTimeMillis();
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args){//////////////////////////////////////////////////////////
 
         /*  直接 print 會變 [I@4926097b，
             在陣列中除了char型的可以直接輸出外，其它型別的陣列輸出都是記憶體地址
@@ -657,6 +708,19 @@ public class LC {
             {'1','0','0','0','0','0','0','0','1','1','1','0'}
         };
         System.out.println("島嶼數量: " + object.numIslands(no43));
+        runtime(rs);
+
+        // no50
+        rs = now();
+        int[] no50 = {17556,2,48,46,120,0,5,484,784,45,254,11,66,46}; 
+        System.out.println("是否有包含重複數字: " + object.containsDuplicate(no50));
+        runtime(rs);
+
+        // no55
+        rs = now();
+        String no50S = "thecountryside";
+        String no50T = "nocitydusthere";
+        System.out.println("是否為變位字: " + object.isAnagram(no50S, no50T));
         runtime(rs);
 
         // no59
