@@ -1,3 +1,4 @@
+//import java.lang.reflect.Array;
 import java.util.*;
 /*import java.util.HashMap;
 import java.util.LinkedList;
@@ -125,6 +126,88 @@ public class LC {
             else {return false; }
         }
         return stack.empty();
+    }
+    // no10 [33]////////////////////////////////////////////////////////////////////////////////
+    static int search(int[] nums, int target) {
+        /** nums = [4,5,6,7,0,1,2], target = 0
+         *  expect = 4
+         *  TC: O(log n), SC: O(1)
+         *  給定數組為旋轉過一次的數組，一樣可以用二分搜尋法
+         *  先找中點，若中點大於起點，則左半是有序的
+         *           若中點小於終點，則右半是有序的
+         */
+        int left = 0;
+        int right = nums.length-1;
+        int mid = (right-left)/2; // JAVA 中兩個 int 型態互除會自動去除餘數
+        /*while(left<right){
+            if(nums[mid] == target){
+                return nums[mid];
+            }else if(nums[mid] < nums[right]){ // 右半邊為有序
+                if(nums[mid] < target && target < nums[right]){
+
+                }
+            }else{
+                right = mid;
+            }
+            mid = (right-left)/2;
+        }*/
+        return -1;
+    }
+    // no11 [39]
+    static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        /**
+         * candidates = [2,3,6,7], targrt = 7
+         * expect = [[2,2,3],[7]]
+         * 
+         * Backtracking 解，先排序組合元素，然後開始遞迴。
+         * 每次用目標值減去組合元素的最大值，若剛好為 0 則為解，小於 0 則為無解，大於 0 則繼續下一層遞迴。
+         */
+        //Arrays.sort(candidates);
+        List<List<Integer>> ans = new ArrayList<>();
+        combinationSumSub(candidates, target, 0, new ArrayList<>(), ans);
+        return ans;
+    }
+    static void combinationSumSub(int[] candidates, int target, int index, List<Integer> temp, List<List<Integer>> ans) {
+        if(target<0){
+            return;
+        }
+        else if(target==0){
+            ans.add(new ArrayList<>(temp));
+        }else{
+            // 迴圈跑這一層的所有可能
+            for(int i=index; i<candidates.length; i++){
+                temp.add(candidates[i]);
+                // 進入下一圈
+                combinationSumSub(candidates, target-candidates[i], i, temp, ans);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
+    // no14 [53]
+    static int maxSubArray(int[] nums) {
+        /**
+         * nums = [-2,1,-3,4,-1,2,1,-5,4] 
+         * expect = 6
+         * TC: O(n), SC: O(1)
+         * DP 解: 對 [1...n] 求最大子串列的問題拆分為
+         *          [1...n-1],[n] 的子問題
+         *       => 如果知道 [1...n-1] 的解，就能推出 [1...n]的解
+         *       1. 如果 [1...n-1] 的解包含 [n-1]，代表問題為此解加上 [n] 是否會變大。
+         *       2. 如果不包含，代表問題為 [n] 是否大於 [1...n-2] 的解。
+         */ 
+        int curr = nums[0];
+        int ans = nums[0];
+        for(int i=1; i<nums.length; i++){
+            if(curr+nums[i] > nums[i]){
+                curr += nums[i];
+                //ans = Math.max(ans, curr);
+            }else{
+                //ans = Math.max(ans, nums[i]);
+                curr = nums[i];
+            }
+            if(curr > ans) ans = curr;
+        }
+        return ans;
     }
     // no18
     static int[][] insert(int[][] intervals, int[] newInterval) {    
@@ -596,6 +679,24 @@ public class LC {
         rs = now();
         runtime(rs);
 
+        // no10
+        int[] no10 = {4,5,6,7,0,1,2};
+        rs = now();
+        System.out.println("no10 搜尋目標結果(若無則返回-1): " + search(no10, 0));
+        runtime(rs);
+
+        // no11
+        int[] no11 = {2,3,6,7};
+        rs = now();
+        System.out.println("no11 目標的所有可能組合為: " + combinationSum(no11, 7));
+        runtime(rs);
+
+        // no14
+        int[] no14 = {-2,1,-3,4,-1,2,1,-5,4};
+        rs = now();
+        System.out.println("no14 最大子陣列總和為: " + maxSubArray(no14));
+        runtime(rs);
+
         // no18
         int[][] no18 = {{1,5},{6,8},{9,15},{17,51},{53,76}};
         int[] newInterval = {4,10};
@@ -707,26 +808,26 @@ public class LC {
             {'1','1','0','0','0','0','0','1','1','1','1','0'},
             {'1','0','0','0','0','0','0','0','1','1','1','0'}
         };
-        System.out.println("島嶼數量: " + object.numIslands(no43));
+        System.out.println("no43 島嶼數量: " + object.numIslands(no43));
         runtime(rs);
 
         // no50
         rs = now();
         int[] no50 = {17556,2,48,46,120,0,5,484,784,45,254,11,66,46}; 
-        System.out.println("是否有包含重複數字: " + object.containsDuplicate(no50));
+        System.out.println("no50 是否有包含重複數字: " + object.containsDuplicate(no50));
         runtime(rs);
 
         // no55
         rs = now();
         String no50S = "thecountryside";
         String no50T = "nocitydusthere";
-        System.out.println("是否為變位字: " + object.isAnagram(no50S, no50T));
+        System.out.println("no55 是否為變位字: " + object.isAnagram(no50S, no50T));
         runtime(rs);
 
         // no59
         rs = now();
         int[] no59 = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19}; 
-        System.out.println("缺少的數字為: " + object.missingNumber(no59));
+        System.out.println("no59 缺少的數字為: " + object.missingNumber(no59));
         runtime(rs);
     }
 }
