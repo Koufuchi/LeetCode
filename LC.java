@@ -9,7 +9,8 @@ import java.util.Stack;*/
 
 public class LC {
     //Test TreeNode = new Test();
-    // no1
+
+    // no1 [1.Two Sum] Easy [Array] [Hash Table]
     static int[] twoSum(int[] nums, int target) {    
 
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();    
@@ -23,7 +24,8 @@ public class LC {
         }
         return null;
     } 
-    // no2
+
+    // no2 [3. Longest Substring Without Repeating Characters] Medium [Hash Table] [String] [Sliding Window] 
     public int lengthOfLongestSubstring(String s) {      
 
         HashMap<Character, Integer> map = new HashMap<Character, Integer>();
@@ -42,7 +44,8 @@ public class LC {
         }
         return ans; 
     }
-    // no3
+
+    // no3 [409. Longest Palindrome] Easy [String] [DP]
     public static String longestPalindrome(String s) { 
 
         int start = 0, end = 0;     
@@ -68,7 +71,8 @@ public class LC {
         }
         return s.substring(start, end);
     }
-    // no4
+
+    // no4 [11. Container With Most Water] Medium [Array] [Two Pointers] [Greedy]
     private static int maxArea(int[] height) {
 
         int max = 0;
@@ -79,7 +83,8 @@ public class LC {
 
         return max;
     }
-    // no5
+
+    // no5 [15. 3Sum] Medium [Array] [Two Pointers] [Sorting]
     static List<List<Integer>> threeSum(int[] nums) {
 
         Arrays.sort(nums);
@@ -102,7 +107,10 @@ public class LC {
         }
         return ans;
     }
-    // no7
+
+    // no6 [19. Remove Nth Node From End of List] Medum [Linked List] [Two Pointers]
+
+    // no7 [20. Valid Parentheses] Easy [String] [Stack]
     static boolean isValid(String s) {
 
         Stack<Character> stack = new Stack<Character>();  
@@ -127,55 +135,100 @@ public class LC {
         }
         return stack.empty();
     }
-    // no10 [33]////////////////////////////////////////////////////////////////////////////////
+
+    // no8 [21. Merge Two Sorted Lists] Easy
+
+    // no9 [23. Merge k Sorted Lists] Hard
+
+    // no10 [33. Search in Rotated Sorted Array] Medium [Array] [Binary Search]
+    /** 
+     * nums = [4,5,6,7,0,1,2], target = 0
+     * expect = 4
+     * TC: O(log n), SC: O(1)
+     * 
+     * 要使用二分搜尋，就必須每次都捨棄一半的資料，
+     * 如果在一般排序好的陣列，只需要 起點、中點、終點 就能判斷目標在哪裡，從而捨棄另一半，
+     * 但在旋轉過一次的陣列裡，要透過兩步驟判斷才能知道，因為只有其中一半是有序的。
+     * 
+     * 先找中點，若中點大於起點，則左半是有序的; 若中點小於終點，則右半是有序的
+     * 1. 如果前半有序，透過起點和中點能判斷目標是否在前，從而判斷要捨棄前段還是後段。
+     * 2. 如果後半有序，透過中點和終點能判斷目標是否在前，從而判斷要捨棄前段還是後段。
+     * 
+     * 其他方法:
+     * (1) 先一次二分找到中點，再對目標所在範圍做二分 O(log n)
+     * (2) 
+     */
     static int search(int[] nums, int target) {
-        /** nums = [4,5,6,7,0,1,2], target = 0
-         *  expect = 4
-         *  TC: O(log n), SC: O(1)
-         *  給定數組為旋轉過一次的數組，一樣可以用二分搜尋法
-         *  先找中點，若中點大於起點，則左半是有序的
-         *           若中點小於終點，則右半是有序的
-         */
+        
         int left = 0;
         int right = nums.length-1;
-        int mid = (right-left)/2; // JAVA 中兩個 int 型態互除會自動去除餘數
-        /*while(left<right){
-            if(nums[mid] == target){
-                return nums[mid];
-            }else if(nums[mid] < nums[right]){ // 右半邊為有序
-                if(nums[mid] < target && target < nums[right]){
+        int mid = (right+left)/2; // JAVA 中兩個 int 型態互除會自動去除餘數
 
-                }
-            }else{
-                right = mid;
+        while(left <= right){
+            if(nums[mid] == target){
+                return mid;
             }
-            mid = (right-left)/2;
-        }*/
+            
+            if(nums[mid] >= nums[left]){ // 前半有序
+                if(nums[left] <= target && target < nums[mid]){ // 目標在前半，對前半做二分
+                    right = mid-1; 
+                }else{ // 目標在後半，對後半做二分
+                    left = mid+1; 
+                }
+            }else{ // 後半有序
+                if(nums[mid] <= target && target < nums[left]){ // 目標在後半，對後半做二分
+                    left = mid+1;
+                }else{ // 目標在前半，對後半做二分
+                    right = mid-1; 
+                }            
+            }
+            mid = (right+left)/2;
+        }
         return -1;
     }
-    // no11 [39]
+
+    // no11 [39. Combination Sum ] Medium [Array] [Backtracking]
+    /**
+     * candidates = [2,3,6,7], targrt = 7
+     * expect = [[2,2,3],[7]]
+     * 
+     * Backtracking 解，先排序組合元素，然後開始遞迴。
+     * 每次用目標值減去組合元素的最大值，若剛好為 0 則為解，小於 0 則為無解，大於 0 則繼續下一層遞迴。
+     * 3ms -> 1ms(不要等進到下一圈才判斷 target 是否小於0，改成在進入下一圈前就先判斷。省去 temp 操作和下一圈的判斷)
+     * 
+     * 其他方案:
+     * (1) 2ms
+     *     不是先加入減去的結果 (將 target 減去這一層的目標傳給下一圈)，
+     *     而是加入相加的結果 (改用定一個變數 nextsum 加這一層的目標傳給下一圈)，剛好相反。
+     *     若 sum (上一圈給的 nextsum) 剛好等於 target 代表找到，大於則無解，小於則繼續下一層。 
+     *     在每次進入下一圈前先定 nextsum =sum+nums[i] 然後判斷是否大於 target，若是則直接跳過這圈。
+     * 
+     * (2) 1ms
+     *     一樣用目標值減去組合元素的最大值，但是不用 for 迴圈，
+     *     在每個遞迴判斷中止條件(1.是否已用完所有元素 2.是否還能再下一層)
+     *     1.若已用完且 target 剛好減到 0 則新增解答，否則 return (因為用完了)
+     *     2.若 candidates[index] < target，代表還能再下一層，則加入 candidates[index] 並傳相減值近下一層。(記得remove)
+     *     若兩者皆無，則換下一個組合元素(index+1 進下一層)
+     */
     static List<List<Integer>> combinationSum(int[] candidates, int target) {
-        /**
-         * candidates = [2,3,6,7], targrt = 7
-         * expect = [[2,2,3],[7]]
-         * 
-         * Backtracking 解，先排序組合元素，然後開始遞迴。
-         * 每次用目標值減去組合元素的最大值，若剛好為 0 則為解，小於 0 則為無解，大於 0 則繼續下一層遞迴。
-         */
         //Arrays.sort(candidates);
         List<List<Integer>> ans = new ArrayList<>();
         combinationSumSub(candidates, target, 0, new ArrayList<>(), ans);
         return ans;
     }
     static void combinationSumSub(int[] candidates, int target, int index, List<Integer> temp, List<List<Integer>> ans) {
-        if(target<0){
+        /*if(target<0){
             return;
         }
-        else if(target==0){
+        else*/ if(target==0){
             ans.add(new ArrayList<>(temp));
         }else{
             // 迴圈跑這一層的所有可能
             for(int i=index; i<candidates.length; i++){
+
+                // 改成直接判斷無可能就跳過，省去 temp 操作和下一圈的判斷
+                if(target-candidates[i]<0) continue;
+
                 temp.add(candidates[i]);
                 // 進入下一圈
                 combinationSumSub(candidates, target-candidates[i], i, temp, ans);
@@ -183,18 +236,23 @@ public class LC {
             }
         }
     }
-    // no14 [53]
-    static int maxSubArray(int[] nums) {
-        /**
-         * nums = [-2,1,-3,4,-1,2,1,-5,4] 
-         * expect = 6
-         * TC: O(n), SC: O(1)
-         * DP 解: 對 [1...n] 求最大子串列的問題拆分為
-         *          [1...n-1],[n] 的子問題
-         *       => 如果知道 [1...n-1] 的解，就能推出 [1...n]的解
-         *       1. 如果 [1...n-1] 的解包含 [n-1]，代表問題為此解加上 [n] 是否會變大。
-         *       2. 如果不包含，代表問題為 [n] 是否大於 [1...n-2] 的解。
-         */ 
+
+    // no12 [48. Rotate Image] Medium
+
+    // no13 [49. Group Anagrams] Medium
+
+    // no14 [53. Maximum Subarray] Easy
+    /**
+     * nums = [-2,1,-3,4,-1,2,1,-5,4] 
+     * expect = 6
+     * TC: O(n), SC: O(1)
+     * DP 解: 對 [1...n] 求最大子串列的問題拆分為
+     *          [1...n-1],[n] 的子問題
+     *       => 如果知道 [1...n-1] 的解，就能推出 [1...n]的解
+     *       1. 如果 [1...n-1] 的解包含 [n-1]，代表問題為此解加上 [n] 是否會變大。
+     *       2. 如果不包含，代表問題為 [n] 是否大於 [1...n-2] 的解。
+     */ 
+    static int maxSubArray(int[] nums) {     
         int curr = nums[0];
         int ans = nums[0];
         for(int i=1; i<nums.length; i++){
@@ -209,7 +267,14 @@ public class LC {
         }
         return ans;
     }
-    // no18
+
+    // no15 [54. Spiral Matrix] Medium
+
+    // no16 [55. Jump Game] Medium
+
+    // no17 [56. Merge Intervals] Medium [Array] [Sorting]
+
+    // no18 [57. Insert Interval] Medium [Array]
     static int[][] insert(int[][] intervals, int[] newInterval) {    
    
         List<int[]> result = new LinkedList<>();
@@ -686,9 +751,9 @@ public class LC {
         runtime(rs);
 
         // no11
-        int[] no11 = {2,3,6,7};
+        int[] no11 = {2,7,6,3,5,1};
         rs = now();
-        System.out.println("no11 目標的所有可能組合為: " + combinationSum(no11, 7));
+        System.out.println("no11 目標的所有可能組合為: " + combinationSum(no11, 9));
         runtime(rs);
 
         // no14
@@ -700,7 +765,7 @@ public class LC {
         // no18
         int[][] no18 = {{1,5},{6,8},{9,15},{17,51},{53,76}};
         int[] newInterval = {4,10};
-        System.out.print("no18 鏈結串列加入數組後合併: ");
+        System.out.print("no18 鏈結串列加入陣列後合併: ");
         rs = now();
         int[][] array = insert(no18, newInterval); 
         for(int i=0; i < array.length; i++){

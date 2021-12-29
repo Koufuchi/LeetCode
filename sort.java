@@ -61,6 +61,55 @@ public class sort {
         return arr;
     }
 
+    // no11 [39]
+    static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        /**
+         * candidates = [2,3,6,7], targrt = 7
+         * expect = [[2,2,3],[7]]
+         * 
+         * Backtracking 解，先排序組合元素，然後開始遞迴。
+         * 每次用目標值減去組合元素的最大值，若剛好為 0 則為解，小於 0 則為無解，大於 0 則繼續下一層遞迴。
+         * 
+         * 還有更好的剪枝方案:
+         *    (多傳一個 sum 進去，在每次進入下一圈前先判斷 nextsum [=sum+nums[i]] 是否大於 target，若是則直接跳過這圈)
+         */
+        //Arrays.sort(candidates);
+        List<List<Integer>> ans = new ArrayList<>();
+        combinationSumSub(candidates, target, 0, new ArrayList<>(), ans, 0);
+        return ans;
+    }
+    static void combinationSumSub(int[] candidates, int target, int index, List<Integer> temp, List<List<Integer>> ans, int round) {
+        System.out.println("");
+        System.out.println("第 "+round+" 層");
+        System.out.println("index : "+index);
+
+        if(index == candidates.length){
+            //System.out.println("index: "+index+"== candidates.length: "+candidates.length);
+            if(target == 0){
+                ans.add(new ArrayList<>(temp));
+                System.out.println("加入新組合: "+ temp);
+            }
+            // 因為已經用過所有組合元素了，所以 return
+            System.out.println("找完所有組合元素 return ");
+            return;
+        }
+
+        if(candidates[index] <= target){
+
+            //System.out.println("candidates[index]: "+candidates[index]+" <= target: "+target);
+            temp.add(candidates[index]);
+            //System.out.println("index : "+index);
+            System.out.println("加入數字: "+candidates[index]+" ，temp 變為:"+ temp );
+            combinationSumSub(candidates, target - candidates[index], index, temp, ans, round+1);
+            temp.remove(temp.size()-1);
+            System.out.println("拿掉數字後: "+temp);
+        }
+
+        System.out.println("尚有可能，把 index 加 1, 找下一個");
+        combinationSumSub(candidates, target, index + 1, temp, ans, round+1);
+        
+    }
+
     public static void main(String[] args){
 
         int[] A1 = {31,41,59,26,41,5831,41,59,26,41,58,31,41,59,26,41,58,31,41,59,26,41,5831,41,59,26,41,58,31,41,59,26,41,58};
@@ -81,6 +130,12 @@ public class sort {
         
         rs = LC.now();
         System.out.println("泡沫排序結果 : " + Arrays.toString(bubbleSort(A1)));
+        LC.runtime(rs);
+
+        // no11
+        int[] no11 = {2,7,6,3,5,1};
+        rs = LC.now();
+        System.out.println("no11 目標的所有可能組合為: " + combinationSum(no11, 9));
         LC.runtime(rs);
     }
 
